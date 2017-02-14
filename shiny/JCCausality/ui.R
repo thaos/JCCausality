@@ -42,12 +42,12 @@ shinyUI(fluidPage(
 	 #      numericInput("num", label = h3("Numeric input"), value = 1))
 	 fluidRow(sliderInput("window", "window length", min = 24, max = 420, value = 120, step = 1)),
 	 fluidRow(sliderInput("alpha", "significance level", min = 0, max = 1, value = 0.01, step = 0.005)),
-	   fluidRow(htmlOutput("graphPlot"))),
+	   fluidRow(plotOutput("graphPlot"))),
   column(4, align = "center",
-	 fluidRow(htmlOutput("distPlot")),
-	 fluidRow(htmlOutput("gnumberPlot"))),
+	 fluidRow(plotOutput("distPlot")),
+	 fluidRow(plotOutput("gnumberPlot"))),
   column(4, align = "center",
-	 fluidRow(htmlOutput("linkPlot")))
+	 fluidRow(plotOutput("linkPlot")))
   ))
   # Loading message
   #   div(id = "loading-content", h2("Loading...")),
