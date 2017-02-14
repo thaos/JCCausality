@@ -8,28 +8,49 @@
 #
 
 library(shiny)
+library(shinyjs)
 
+
+appCSS <- "
+#loading_page {
+position: absolute;
+background: #000000;
+opacity: 0.9;
+z-index: 100;
+left: 0;
+right: 0;
+height: 100%;
+text-align: center;
+color: #FFFFFF;
+}
+"
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-  
+   
   # Application title
   titlePanel("Granger Graphs for 10-year Periods"),
   includeScript("leftright.js"),
-  verbatimTextOutput("results"),
-column(3, align= "center",
-	 fluidRow(sliderInput("period",
-			    "start of the period",
-			    min = 1,
-			    max = 420,
-			    value = 1,
-			    animate = animationOptions(interval = 2500, playButton = icon('play', "fa-3x"), pauseButton = icon('pause', "fa-3x"))
-			    #                    min = as.Date("1990-01-01"),
-			    #                    max = as.Date("2015-01-01"),
-			    #                    value = as.Date("2000-01-01"),
-			    #                    timeFormat = "%F"
+  inlineCSS(appCSS),
+  useShinyjs(),
+  div(id = "loading_page", h1("Loading...")),
+  hidden(div(id = "main_content",
+  column(3, align= "center",
+	 fluidRow(sliderInput("period", "start of the period", min = 1, max = 420, value = 1,
+			    animate = animationOptions(interval = 1000, playButton = icon('play', "fa-3x"), pauseButton = icon('pause', "fa-3x"))
 			    )),
-	   fluidRow(plotOutput("graphPlot"))),
-  column(6, align = "center",
-	 fluidRow(plotOutput("distPlot")),
-	 fluidRow(plotOutput("gnumberPlot")))
-))
+	 # replace by numericInput
+	 #      numericInput("num", label = h3("Numeric input"), value = 1))
+	 fluidRow(sliderInput("window", "window length", min = 24, max = 420, value = 120, step = 1)),
+	 fluidRow(sliderInput("alpha", "significance level", min = 0, max = 1, value = 0.01, step = 0.005)),
+	   fluidRow(htmlOutput("graphPlot"))),
+  column(4, align = "center",
+	 fluidRow(htmlOutput("distPlot")),
+	 fluidRow(htmlOutput("gnumberPlot"))),
+  column(4, align = "center",
+	 fluidRow(htmlOutput("linkPlot")))
+  ))
+  # Loading message
+  #   div(id = "loading-content", h2("Loading...")),
+  # The main app code goes here
+  #   verbatimTextOutput("results"),
+  ))
