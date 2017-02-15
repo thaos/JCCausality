@@ -47,10 +47,6 @@ vm_to_granger <- function(vm){
   rownames(res) <- ynames
   res
 }
-# gmat <- vm_to_granger(varmodel)
-# gmat <- gmat <= 0.05
-# gmat <- (as(gmat, "graphNEL"))
-# plot(gmat)
 
 build_ggraph <- function(dat, alpha){
   ina <- which(apply(dat, 1, function(x) any(is.na(x))))

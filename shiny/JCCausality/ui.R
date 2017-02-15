@@ -6,10 +6,8 @@
 # 
 #    http://shiny.rstudio.com/
 #
-
 library(shiny)
 library(shinyjs)
-
 
 appCSS <- "
 #loading_page {

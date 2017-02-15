@@ -41,8 +41,6 @@ loading <- function(){
 }
 lldir <- c()
 
-
-
 shinyServer(
 function(input, output, session){
   # loading data and itialization
