@@ -47,14 +47,33 @@ shinyServer(
 function(input, output, session){
   # loading data and itialization
   rvalues <- reactiveValues() 
+
   observe({
-    loading()
-    sol <- saveorload(input$window, input$alpha)
-    rvalues$ldates <- sol$ldates
-    rvalues$ldir <- sol$ldir
-    lldir <<- c(lldir, rvalues$ldir)
-    loaded()
+    if(input$window < 70) updateNumericInput("window", value = 70, session=session)
+    if(input$window > 420) updateNumericInput("window", value = 420, session=session)
   })
+  
+  compute_graphs <- reactive({
+    input$compute
+    print("iaminside")
+    isolate({
+      # do expensive stuff here and return the result
+      loading()
+      print(input$window)
+      print(input$alpha)
+      sol <- saveorload(input$window, input$alpha)
+      rvalues$ldates <- sol$ldates
+      rvalues$ldir <- sol$ldir
+      rvalues$tarfile <- sol$tarfile
+      lldir <<- c(lldir, rvalues$ldir, rvalues$tarfile)
+      label <- paste(rvalues$ldates[input$period], "to", rvalues$ldates[input$period + input$window - 1]) 
+      updateSliderInput(session, "period", min = 1 , max = length(rvalues$ldates) - input$window + 1, label = label)
+      loaded()
+      rvalues
+    })
+  })
+
+  observe({ rvalues <- compute_graphs()})
 
   observe({
     label <- paste(rvalues$ldates[input$period], "to", rvalues$ldates[input$period + input$window - 1]) 
@@ -102,7 +121,7 @@ function(input, output, session){
     print("Ending Rshiny session")
     print("Removing local files")
     print(lldir)
-    #     lapply(lldir, unlink, recursive=TRUE)
+    lapply(lldir, unlink, recursive=TRUE)
   })
 })
 

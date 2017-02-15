@@ -72,6 +72,7 @@ doallgraphs <- function(dat, date_col, window_size=120, alpha=0.01){
   dat_m  <- melt(dat, id="date")
   ldates <- dat[, date_col]
   dat <- dat[, -date_col]
+  print(head(dat))
   lgraphs <- lapply(1:(nrow(dat)-(window_size-1)),
 		      function(x){
 			d <- dat[x:(x+window_size-1), ] 
@@ -92,5 +93,5 @@ doallgraphs <- function(dat, date_col, window_size=120, alpha=0.01){
   alinks_m <- alinks_m[, -(1:3)]
   names(lgraphs) <- ldates[seq_along(lgraphs)]
   names(lgnumbers) <- ldates[seq_along(lgnumbers)]
-  list(dat_m=dat_m, alinks_m=alinks_m, lgraphs=lgraphs, lgnumbers=lgnumbers, ldates=ldates[seq_along(lgnumbers)] , window_size=window_size, alpha=alpha)
+  list(dat_m=dat_m, alinks_m=alinks_m, lgraphs=lgraphs, lgnumbers=lgnumbers, window_size=window_size, alpha=alpha)
 }
